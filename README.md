@@ -69,3 +69,4 @@ Note: the linter runs as git pre-commit hook. (Installed during `npm install` us
 ### VS Code
 
 To use this monorepo with VS Code [Multi-root workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) there is a [content-lake-shared.code-workspace](content-lake-shared.code-workspace) file. This needs to be updated if new projects are added under [packages](packages/).
+
