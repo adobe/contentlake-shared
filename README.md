@@ -64,6 +64,9 @@ npm test
 npm run lint
 ```
 
+Note: the linter runs as git pre-commit hook. (Installed during `npm install` using [husky](https://github.com/typicode/husky)).
+
 ### VS Code
 
 To use this monorepo with VS Code [Multi-root workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) there is a [content-lake-shared.code-workspace](content-lake-shared.code-workspace) file. This needs to be updated if new projects are added under [packages](packages/).
+
