@@ -1,6 +1,6 @@
 {
   "name": "@adobe/content-lake-shared-auth",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Shared modules of the Content Lake Project - auth",
   "main": "src/auth.js",
   "type": "module",
