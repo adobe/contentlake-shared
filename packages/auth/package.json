@@ -2,7 +2,7 @@
   "name": "@adobe/content-lake-shared-auth",
   "version": "1.0.0",
   "description": "Shared modules of the Content Lake Project - auth",
-  "main": "src/auth.js",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
     "test": "c8 mocha",
@@ -28,9 +28,10 @@
   },
   "dependencies": {
     "@adobe/fetch": "^4.0.1",
-    "@adobe/helix-shared-wrap": "^2.0.0"
+    "@adobe/helix-shared-wrap": "^2.0.0",
+    "jsonwebtoken": "^9.0.0"
   },
-  "optionalDependencies": {
-    "@adobe/helix-universal": "^4.0.0"
+  "peerDependencies": {
+    "@adobe/helix-universal": ">=4.2.0"
   }
 }

@@ -7,5 +7,7 @@
 			"path": "packages/auth"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"editor.tabSize": 2
+	}
 }

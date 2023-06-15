@@ -10,14 +10,17 @@
  * governing permissions and limitations under the License.
  */
 
-/* eslint-env mocha */
-/* eslint-disable no-console */
+import assert, { AssertionError } from 'assert';
 
-import assert from 'assert';
-import { hello } from '../src/auth.js';
-
-describe('auth tests', () => {
-  it('should return hello', () => {
-    assert.strictEqual(hello(), 'hello');
+export function assertPartialObjectMatch(obj, partial) {
+  return Object.keys(partial).every((key) => {
+    try {
+      return assert.deepStrictEqual(obj[key], partial[key]);
+    } catch (e) {
+      throw new AssertionError({
+        message: e.message.replace('Expected values', `Expected values for key '${key}'`),
+        stackStartFn: assertPartialObjectMatch,
+      });
+    }
   });
-});
+}
