@@ -41,10 +41,6 @@ function isFronteggDevEnv(request) {
 /* Authentication logic */
 // eslint-disable-next-line no-unused-vars
 export async function handleAuthentication(request, context, opts = {}) {
-  if (opts.skipAuthentication) {
-    return;
-  }
-
   // make sure to overwrite any existing user on the object
   delete context.user;
 

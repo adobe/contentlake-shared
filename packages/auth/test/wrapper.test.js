@@ -62,8 +62,7 @@ describe('auth wrapper', () => {
 
     try {
       const actualFn = wrap(universalFn).with(auth({
-        skipAuthentication: true,
-        skipAuthorization: true,
+        skip: true,
       }));
 
       await actualFn(new Request('http://localhost?foo=bar'), {

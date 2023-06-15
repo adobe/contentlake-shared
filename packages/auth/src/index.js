@@ -14,19 +14,26 @@ import { handleAuthentication } from './authentication.js';
 import { handleAuthorization } from './authorization.js';
 
 /**
- * @summary Authentication and authorization library for Asset Catalog
- * @description Authentication and authorization library for Asset Catalog.
+ * @summary Frontegg authentication and authorization library for Asset Catalog
+ * @description Frontegg authentication and authorization library for Asset Catalog.
  *
- * This requires `@adobe/helix-universal` 4.2.0 or newer.
+ * Features:
+ * - Frontegg Bearer access token validation (authentication)
+ * - Tenant membership validation for Asset Catalog based on `x-space-host` header
+ * - Custom `permissions` and `roles` authorization
+ * - Provides user information to application code in context.user (token, payload)
+ * - Provides tenant information to application code in context.tenant (spaceId, companyId)
+ *
+ * This requires [@adobe/helix-universal](https://github.com/adobe/helix-universal) 4.2.0 or newer.
  *
  * #### Usage
  *
  * There are two ways to use this library:
- * 1. `auth` wrapper function to run as middleware for all requests
- * 2. `handleAuth` function to call inside your own routing logic for
- *    only the requests that need this authentication and authorization
+ * 1. simply plug in `auth()` as wrapper function to run as middleware for all requests
+ * 2. explicitly call `handleAuth()` inside your own routing logic for
+ *    only the requests that require the frontegg authentication and authorization
  *
- * ##### `auth` wrapper function
+ * ##### `auth()` middleware
  * If the entire function and all its requests should be guarded
  * by the authentication and authorization middleware, add the
  * wrapper function `auth`:
@@ -44,7 +51,10 @@ import { handleAuthorization } from './authorization.js';
  *   .with(helixStatus);
  * ```
  *
- * ##### `handleAuth` function
+ * ##### `handleAuth()`
+ *
+ * Invoke `await handleAuth()` inside your own routing logic for the authentication check
+ * at the start of request handling:
  *
  * ```js
  * import { handleAuth } from '@adobe/asset-compute-auth';
@@ -67,7 +77,7 @@ import { handleAuthorization } from './authorization.js';
  * }
  *
  * ```
- * @module
+ * @module auth
  */
 
 /**
@@ -76,15 +86,15 @@ import { handleAuthorization } from './authorization.js';
  * @typedef {object} AuthOptions
  *
  * @property {(string|string[])} permissions Frontegg permission(s) the user is required to have
-
+ *
  * @property {(string|string[])} roles Frontegg role(s) the user is required to have.
  *   Warning: it is highly preferred to use `permissions` instead of roles in code, as that allows
  *   for more flexibility in defining and changing roles.
 
- * @property {boolean} skipAuthentication Skip authentication entirely.
+ * @property {boolean} skip If `true`, skip all authentication and authorization checks.
  *   Only intended for development & testing.
- * @property {boolean} skipAuthorization Skip authorization entirely.
- *   Only intended for development & testing.
+ * @property {boolean} skipAuthorization If `true`, skip any authorization checks. A valid access
+ *   token in the request is still required. Only intended for development & testing.
  */
 
 /**
@@ -104,6 +114,10 @@ import { handleAuthorization } from './authorization.js';
  * @param {AuthOptions} [opts] Authentication and authorization options
  */
 export async function handleAuth(request, context, opts = {}) {
+  if (opts.skip) {
+    return;
+  }
+
   await handleAuthentication(request, context, opts);
   await handleAuthorization(request, context, opts);
 }

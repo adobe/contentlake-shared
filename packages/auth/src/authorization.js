@@ -12,7 +12,7 @@
 
 import { AuthorizationError, ErrorResponse } from './error.js';
 
-/** Authorization logic */
+/* Authorization logic */
 export async function handleAuthorization(request, context, opts = {}) {
   if (opts.skipAuthorization) {
     return;
