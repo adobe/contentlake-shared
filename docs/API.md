@@ -1,7 +1,7 @@
 <a name="module_auth"></a>
 
 ## auth
-Frontegg authentication and authorization library for Asset Catalog.
+Frontegg authentication and authorization library for Asset Catalog (contentlake).
 
 Features:
 - Frontegg Bearer access token validation (authentication)
@@ -76,7 +76,7 @@ async function main(request, context) {
 <a name="module_auth.handleAuth"></a>
 
 ### auth.handleAuth(request, context, [opts])
-Authentication and authorization handler for content-lake using Frontegg
+Authentication and authorization handler for Asset Catalog using Frontegg
 tokens and space tenants.
 
 This will throw an error if authentication or authorization fails

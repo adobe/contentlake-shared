@@ -1,7 +1,7 @@
 {
-  "name": "@adobe/content-lake-shared-auth",
-  "version": "1.0.0",
-  "description": "Shared modules of the Content Lake Project - auth",
+  "name": "@adobe/contentlake-shared-frontegg-auth",
+  "version": "0.0.1",
+  "description": "Frontegg authentication and authorization library for Asset Catalog",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/adobe/content-lake-shared"
+    "url": "https://github.com/adobe/contentlake-shared"
   },
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/adobe/content-lake-shared/issues"
+    "url": "https://github.com/adobe/contentlake-shared/issues"
   },
-  "homepage": "https://github.com/adobe/content-lake-shared#readme",
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/auth#readme",
   "publishConfig": {
     "access": "public"
   },

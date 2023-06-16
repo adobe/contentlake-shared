@@ -6,13 +6,11 @@ This is a monorepo and the various libraries can be found in [packages](packages
 
 ## Status
 
-[![NPM Version](https://img.shields.io/npm/v/@adobe/content-lake-shared.svg)](https://www.npmjs.com/package/@adobe/content-lake-shared)
-[![codecov](https://img.shields.io/codecov/c/github/adobe/content-lake-shared.svg)](https://codecov.io/gh/adobe/content-lake-shared)
-[![CircleCI](https://img.shields.io/circleci/project/github/adobe/content-lake-shared.svg)](https://circleci.com/gh/adobe/content-lake-shared)
-[![GitHub license](https://img.shields.io/github/license/adobe/content-lake-shared.svg)](https://github.com/adobe/content-lake-shared/blob/main/LICENSE.txt)
-[![GitHub issues](https://img.shields.io/github/issues/adobe/content-lake-shared.svg)](https://github.com/adobe/content-lake-shared/issues)
-[![LGTM Code Quality Grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/adobe/content-lake-shared.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/adobe/content-lake-shared) 
-[![Known Vulnerabilities](https://snyk.io/test/github/adobe/content-lake-shared/badge.svg?targetFile=package.json)](https://snyk.io/test/github/adobe/content-lake-shared?targetFile=package.json)
+[![codecov](https://img.shields.io/codecov/c/github/adobe/contentlake-shared.svg)](https://codecov.io/gh/adobe/contentlake-shared)
+[![CircleCI](https://img.shields.io/circleci/project/github/adobe/contentlake-shared.svg)](https://circleci.com/gh/adobe/contentlake-shared)
+[![GitHub license](https://img.shields.io/github/license/adobe/contentlake-shared.svg)](https://github.com/adobe/contentlake-shared/blob/main/LICENSE.txt)
+[![GitHub issues](https://img.shields.io/github/issues/adobe/contentlake-shared.svg)](https://github.com/adobe/contentlake-shared/issues)
+[![Known Vulnerabilities](https://snyk.io/test/github/adobe/contentlake-shared/badge.svg?targetFile=package.json)](https://snyk.io/test/github/adobe/contentlake-shared?targetFile=package.json)
 
 ## Usage
 
@@ -21,15 +19,15 @@ This is a monorepo and the various libraries can be found in [packages](packages
 Install the desired [library](packages) using npm, for example:
 
 ```
-npm install @adobe/content-lake-shared-auth
+npm install @adobe/contentlake-shared-frontegg-auth
 ```
 
-Packages are named `@adobe/content-lake-shared-<folder>` with `<folder>` being the project's folder name under [packages](packages/).
+Packages are named `@adobe/contentlake-shared-<folder>` with `<folder>` being the project's folder name under [packages](packages/).
 
 Then import the APIs you need:
 
 ```javascript
-import { something } from `@adobe/content-lake-shared-auth`;
+import { something } from `@adobe/@adobe/contentlake-shared-frontegg-auth`;
 
 // ...
 
@@ -68,4 +66,4 @@ Note: the linter runs as git pre-commit hook. (Installed during `npm install` us
 
 ### VS Code
 
-To use this monorepo with VS Code [Multi-root workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) there is a [content-lake-shared.code-workspace](content-lake-shared.code-workspace) file. This needs to be updated if new projects are added under [packages](packages/).
+To use this monorepo with VS Code [Multi-root workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) there is a [contentlake-shared.code-workspace](contentlake-shared.code-workspace) file. This needs to be updated if new projects are added under [packages](packages/).
