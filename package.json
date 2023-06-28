@@ -1,5 +1,5 @@
 {
-  "name": "@adobe/content-lake-shared-monorepo",
+  "name": "@adobe/contentlake-shared-monorepo",
   "private": true,
   "version": "1.0.0",
   "description": "Shared modules of the Content Lake Project - monorepo",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/adobe/content-lake-shared"
+    "url": "https://github.com/adobe/contentlake-shared"
   },
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/adobe/content-lake-shared/issues"
+    "url": "https://github.com/adobe/contentlake-shared/issues"
   },
-  "homepage": "https://github.com/adobe/content-lake-shared#readme",
+  "homepage": "https://github.com/adobe/contentlake-shared#readme",
   "workspaces": [
     "./packages/*"
   ],

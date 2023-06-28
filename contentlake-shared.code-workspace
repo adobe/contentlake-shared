@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "packages/frontegg-auth"
+		}
+	],
+	"settings": {
+		"editor.tabSize": 2
+	}
+}

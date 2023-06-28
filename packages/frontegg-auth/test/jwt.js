@@ -1,0 +1,92 @@
+/*
+ * Copyright 2023 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+import jwt from 'jsonwebtoken';
+
+/** Private RS256 key for testing */
+const PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
+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
+-----END RSA PRIVATE KEY-----`;
+
+/** Public RS256 key for testing */
+export const PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAuJ/CxTLN84oiFRPZfyD+
+hfkmZyaH1sgn33MkblCUcmtGSFmrkwIogglh5zIy3PWXqClNKnYipfqgVrajftQW
+rLA7zSIG6PgPQpAkuAi4z/9FxFJanVaqjYlLKytEndithl4zpypIKYV7psFLXqAH
+YplwuX3Vtm+EzM+nxybZtWeJ7igZlOiVi2yBxyQMxPvbMDbmQUDbZsF1GEoYMv6F
+W0yAL+GitU1MfM60xOD4tAXKyRpQWPDqLIEQ5DEhqaQT9RtQAWcH6Wr8Lk7GBn3b
+hsQcLVw1UpNm2NmfzPjU60GYuADZDTItOmpgXP/ApqSsb8OyhYOUb9pjDLC7ijXm
+TpM5/Khf7jBG62uQgBUdhiVehhrldUkXTbYLk311R9JgYOqzRu36zsmtlP7nHnvH
+yNGlflBAESnHtLzJNx35H4O+Fd094UiLdb235PCE0EKZ+Hlo4kETHUU5DRlYW5jC
+7mXkQDeU0Jywn9mleJcCtsY04horJXfjEW5iq+WV/TxLPSyX5WnbLeGreOe4g932
+U3pweGs3oV5WXyvA/DUhDiy/RC3seKNedl0b44cOdf6rZL8tJ+A6dr0Oy9AsG6mT
+ctSNz/UN2DNKzv+jXLVYRNXN/ITTIBOIfTNVa92823+Ckwuu9kT4DrkbN1JYIvYR
+v3XPTUBXsmOR5LIGmOPikFsCAwEAAQ==
+-----END PUBLIC KEY-----`;
+
+export function createJWT(payload = {}) {
+  return jwt.sign(
+    payload,
+    PRIVATE_KEY,
+    {
+      algorithm: 'RS256',
+    },
+  );
+}
