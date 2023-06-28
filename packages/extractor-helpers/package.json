@@ -1,0 +1,35 @@
+{
+  "name": "@adobe/contentlake-shared-extractor-helpers",
+  "version": "0.0.1",
+  "description": "Helper classes for Content Lake Extractors",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "c8 mocha",
+    "lint": "eslint ."
+  },
+  "mocha": {
+    "reporter": "mocha-multi-reporters",
+    "reporter-options": "configFile=../../.mocha-multi.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/contentlake-shared"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/adobe/contentlake-shared/issues"
+  },
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/extractor-helpers#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@adobe/content-lake-commons": "^1.8.1",
+    "async": "^3.2.4"
+  },
+  "devDependencies": {
+    "nock": "^13.3.1"
+  }
+}
