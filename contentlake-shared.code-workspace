@@ -4,6 +4,9 @@
 			"path": "."
 		},
 		{
+			"path": "packages/extractor-helpers"
+		},
+		{
 			"path": "packages/frontegg-auth"
 		}
 	],
