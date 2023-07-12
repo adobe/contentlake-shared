@@ -1,6 +1,6 @@
 {
   "name": "@adobe/contentlake-shared-request-handler",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Handler for SQS and REST Requests",
   "main": "src/index.js",
   "type": "module",
