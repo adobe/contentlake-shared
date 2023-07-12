@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "packages/frontegg-auth"
+		},
+		{
+			"path": "packages/request-handler"
 		}
 	],
 	"settings": {
