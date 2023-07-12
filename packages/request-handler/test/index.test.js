@@ -77,9 +77,14 @@ describe('Request Handler Tests', () => {
     });
 
     it('can supply wrapper function', async () => {
-      const requestHandler = new RequestHandler().withWrapFunction((fn) => fn);
+      let executed = false;
+      const requestHandler = new RequestHandler().withWrapFunction((fn) => {
+        executed = true;
+        return fn;
+      });
       const main = requestHandler.getMain();
       assert.ok(main);
+      assert.ok(executed);
     });
   });
 
