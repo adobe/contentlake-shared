@@ -15,3 +15,18 @@ Install using:
 ```
 npm install @adobe/contentlake-shared-request-handler
 ```
+
+Use with:
+
+```
+import { RequestHandler } from '@adobe/contentlake-shared-request-handler';
+
+
+const requestHandler = new RequestHandler()
+  .withHandler(
+    'some-action',
+    (event, context) => someFunction(event, context),
+  );
+
+export const main = requestHandler.getMain();
+```
