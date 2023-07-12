@@ -23,6 +23,8 @@ describe('Ingestor Client Tests', () => {
     const scope = nock(TEST_INGESTOR_URL)
       .post('/')
       .matchHeader('x-api-key', 'test-api-key')
+      .matchHeader('x-job-id', 'test-job-id')
+      .matchHeader('x-request-id', /.+/)
       .reply(200, 'Ok');
     const client = new IngestorClient({
       url: `${TEST_INGESTOR_URL}/`,
@@ -51,6 +53,8 @@ describe('Ingestor Client Tests', () => {
       .reply(502)
       .post('/')
       .matchHeader('x-api-key', 'test-api-key')
+      .matchHeader('x-job-id', 'test-job-id')
+      .matchHeader('x-request-id', /.+/)
       .reply(200, 'Ok');
     const client = new IngestorClient({
       url: `${TEST_INGESTOR_URL}/`,
@@ -76,9 +80,13 @@ describe('Ingestor Client Tests', () => {
     const scope = nock(TEST_INGESTOR_URL)
       .post('/')
       .matchHeader('x-api-key', 'test-api-key')
+      .matchHeader('x-job-id', 'test-job-id')
+      .matchHeader('x-request-id', /.+/)
       .reply(502, '', { 'Retry-After': 1 })
       .post('/')
       .matchHeader('x-api-key', 'test-api-key')
+      .matchHeader('x-job-id', 'test-job-id')
+      .matchHeader('x-request-id', /.+/)
       .reply(200, 'Ok');
     const client = new IngestorClient({
       url: `${TEST_INGESTOR_URL}/`,
@@ -104,9 +112,13 @@ describe('Ingestor Client Tests', () => {
     const scope = nock(TEST_INGESTOR_URL)
       .post('/')
       .matchHeader('x-api-key', 'test-api-key')
+      .matchHeader('x-job-id', 'test-job-id')
+      .matchHeader('x-request-id', /.+/)
       .reply(400, 'Your request is bad and you should feel bad')
       .post('/')
       .matchHeader('x-api-key', 'test-api-key')
+      .matchHeader('x-job-id', 'test-job-id')
+      .matchHeader('x-request-id', /.+/)
       .reply(200, 'Ok');
     const client = new IngestorClient({
       url: `${TEST_INGESTOR_URL}/`,

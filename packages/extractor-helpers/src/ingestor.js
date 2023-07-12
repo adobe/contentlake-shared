@@ -125,8 +125,10 @@ export class IngestorClient {
     });
     const res = await this.#client.fetch(this.#config.url, {
       headers: {
-        'X-API-Key': this.#config.apiKey,
         'Content-Type': 'application/json',
+        'x-api-key': this.#config.apiKey,
+        'x-job-id': jobId,
+        'x-request-id': requestId,
       },
       method: 'POST',
       body: JSON.stringify({
