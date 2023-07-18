@@ -1,0 +1,39 @@
+{
+  "name": "@adobe/contentlake-shared-search-index",
+  "version": "1.0.0",
+  "description": "Wrapper for using Algolia Search Index JS API",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test:integration": "mocha it/*.test.js",
+    "test": "c8 mocha test/*.test.js",
+    "lint": "eslint ."
+  },
+  "mocha": {
+    "reporter": "mocha-multi-reporters",
+    "reporter-options": "configFile=../../.mocha-multi.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/contentlake-shared"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/adobe/contentlake-shared/issues"
+  },
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/search-index#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@adobe/content-lake-commons": "^1.9.0",
+    "algoliasearch": "^4.19.0",
+    "clone": "^2.1.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "nock": "^13.3.1",
+    "sinon": "^15.2.0"
+  }
+}

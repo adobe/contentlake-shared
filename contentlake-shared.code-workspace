@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "packages/request-handler"
+		},
+		{
+			"path": "packages/search-index"
 		}
 	],
 	"settings": {
