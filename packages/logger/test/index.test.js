@@ -35,7 +35,7 @@ describe('OpsLog class', async () => {
   it('Create new OpsLog', () => {
     const jobId = randomUUID();
     const requestId = randomUUID();
-    const opsLog = new OpsLog(context, jobId, requestId);
+    const opsLog = new OpsLog(context.log, jobId, requestId);
     assert.strictEqual(opsLog.jobId, jobId);
     assert.strictEqual(opsLog.requestId, requestId);
     assert.strictEqual(opsLog.getLogHeader(), `JOB: ${jobId} REQ: ${requestId}`);
@@ -43,7 +43,7 @@ describe('OpsLog class', async () => {
   it('Add a step to the opsLog header', () => {
     const jobId = randomUUID();
     const requestId = randomUUID();
-    const opsLog = new OpsLog(context, jobId, requestId);
+    const opsLog = new OpsLog(context.log, jobId, requestId);
     opsLog.setStep('dispatch');
     assert.strictEqual(opsLog.jobId, jobId);
     assert.strictEqual(opsLog.requestId, requestId);
@@ -52,7 +52,7 @@ describe('OpsLog class', async () => {
   it('Check all log types work without an error', () => {
     const jobId = randomUUID();
     const requestId = randomUUID();
-    const opsLog = new OpsLog(context, jobId, requestId);
+    const opsLog = new OpsLog(context.log, jobId, requestId);
     assert.strictEqual(opsLog.getLogHeader(), `JOB: ${jobId} REQ: ${requestId}`);
 
     opsLog.error('error');
@@ -64,7 +64,7 @@ describe('OpsLog class', async () => {
   it('Trace not supported', () => {
     const jobId = randomUUID();
     const requestId = randomUUID();
-    const opsLog = new OpsLog(context, jobId, requestId);
+    const opsLog = new OpsLog(context.log, jobId, requestId);
     assert.strictEqual(opsLog.getLogHeader(), `JOB: ${jobId} REQ: ${requestId}`);
 
     try {
