@@ -1,0 +1,35 @@
+{
+  "name": "@adobe/contentlake-shared-logger",
+  "version": "1.0.0",
+  "description": "Logger for Asset Catalog Lambda Services",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "c8 mocha",
+    "lint": "eslint ."
+  },
+  "mocha": {
+    "reporter": "mocha-multi-reporters",
+    "reporter-options": "configFile=../../.mocha-multi.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/contentlake-shared"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/adobe/contentlake-shared/issues"
+  },
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/logger#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@adobe/content-lake-commons": "^1.9.0"
+  },
+  "devDependencies": {
+    "@adobe/fetch": "^4.0.13",
+    "@adobe/helix-shared-wrap": "^2.0.0"
+  }
+}
