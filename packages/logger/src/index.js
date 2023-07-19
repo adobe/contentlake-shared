@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { ContextHelper, RestError } from '@adobe/content-lake-commons';
+import { RestError } from '@adobe/content-lake-commons';
 import { randomUUID } from 'crypto';
 
 export class OpsLog {
@@ -18,13 +18,12 @@ export class OpsLog {
 
   #logHeader;
 
-  constructor(context, jobId, requestId) {
+  constructor(log, jobId, requestId) {
     this.jobId = jobId;
     this.requestId = requestId;
     this.start = Date.now();
 
-    const contextHelper = new ContextHelper(context);
-    this.#log = contextHelper.getLog();
+    this.#log = log || console;
   }
 
   getLogHeader() {
@@ -107,7 +106,7 @@ export function logger(func) {
     const jobId = jobIdHeader || randomUUID();
     const requestIdHeader = params?.headers.get('x-request-id');
     const requestId = requestIdHeader || randomUUID();
-    const opsLog = new OpsLog(context, jobId, requestId);
+    const opsLog = new OpsLog(context?.log, jobId, requestId);
 
     context.log = opsLog;
     context.log.logStart();
