@@ -83,7 +83,7 @@ export class OpsLog {
     // hopefully errors will follow similar structure: https://github.com/adobe/content-lake-commons/blob/main/src/rest-error.js
     // but stay less strict and log entire erroruntil we are synced throughout all repos
     const message = error || JSON.stringify(problem);
-    this.#log.error(`${this.getLogHeader()} STATUS: ${problem.status} DURATION (ms): ${duration} MESSAGE: ${message}`);
+    this.#log.error(`${this.getLogHeader()} STATUS: ${problem.status} DURATION_MS: ${duration} MESSAGE: ${message}`);
   }
 
   /**
@@ -93,7 +93,7 @@ export class OpsLog {
   logEnd(statusObj) {
     const duration = Date.now() - this.startTime;
     const statusMsg = statusObj?.statusText || 'Function ended';
-    this.info(`STATUS: ${statusObj?.status || 202} DURATION (ms): ${duration} MESSAGE: ${statusMsg}`);
+    this.info(`STATUS: ${statusObj?.status || 202} DURATION_MS: ${duration} MESSAGE: ${statusMsg}`);
   }
 }
 
