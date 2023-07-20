@@ -53,22 +53,4 @@ describe('BlobStorage Unit Tests', () => {
     assert.strictEqual(mockClient.req.input.Key, 'test-key');
     assert.strictEqual(res, 'Hello world');
   });
-
-  it('can get signed url', async () => {
-    const mockClient = new MockAwsClient();
-    const storage = new BlobStorage({
-      client: mockClient,
-      bucket: 'unittest',
-    });
-    const readable = new Readable();
-    readable.push('Hello world');
-    readable.push(null);
-    mockClient.resp = {
-      Body: readable,
-    };
-    const res = await storage.getString('test-key');
-    assert.strictEqual(mockClient.req.input.Bucket, 'unittest');
-    assert.strictEqual(mockClient.req.input.Key, 'test-key');
-    assert.strictEqual(res, 'Hello world');
-  });
 });
