@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "c8 mocha",
+    "test": "c8 mocha test",
+    "test:integration": "mocha it",
     "lint": "eslint .",
     "clean": "rm -rf package-lock.json node_modules"
   },
