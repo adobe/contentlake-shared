@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-logger-v1.0.2](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-logger-v1.0.1...@adobe/contentlake-shared-logger-v1.0.2) (2023-07-20)
+
+
+### Bug Fixes
+
+* fix name of duration identifier in logs to be one word ([#20](https://github.com/adobe/contentlake-shared/issues/20)) ([5bf5611](https://github.com/adobe/contentlake-shared/commit/5bf56118d7fe27fa869c7c4e68830f25cfaa93c2))
+
 # [@adobe/contentlake-shared-logger-v1.0.1](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-logger-v1.0.0...@adobe/contentlake-shared-logger-v1.0.1) (2023-07-19)
 
 
