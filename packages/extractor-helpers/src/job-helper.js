@@ -10,8 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import { RestError } from '@adobe/content-lake-commons';
 import { randomUUID } from 'crypto';
+import { RestError } from '@adobe/content-lake-commons';
 
 /**
  * Helper for Extractor Jobs
@@ -33,15 +33,14 @@ export class JobHelper {
   /**
    * @param {import("./settings.js").SettingsObject} sourceSettings
    * @param {string} jobId
-   * @returns {boolean} True if the jobId is a full job, matches the
-   *  currentJobId and is in a RUNNING state.
+   * @returns {boolean} True if the jobId matches the jobId of the same job tye
    */
   static isCurrentRunningJob(sourceSettings, jobId) {
-    return (
-      jobId.startsWith(JobHelper.JOB_TYPE.FULL)
-      && sourceSettings.currentJobId === jobId
-      && sourceSettings.currentJobStatus === JobHelper.JOB_STATUS.RUNNING
-    );
+    if (this.isUpdateJob(jobId)) {
+      return sourceSettings.updateJobId === jobId;
+    } else {
+      return sourceSettings.currentJobId === jobId;
+    }
   }
 
   /**
@@ -78,15 +77,14 @@ export class JobHelper {
    */
   async complete(jobId, sourceId, cursor) {
     const sourceSettings = await this.#getSettings(sourceId);
-    const currentRunningJob = JobHelper.isCurrentRunningJob(
-      sourceSettings,
-      jobId,
-    );
-    if (currentRunningJob) {
-      sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.COMPLETE;
-      sourceSettings.currentJobDone = new Date().toISOString();
-    }
-    if (currentRunningJob || JobHelper.isUpdateJob(jobId)) {
+    if (JobHelper.isCurrentRunningJob(sourceSettings, jobId)) {
+      if (JobHelper.isUpdateJob(jobId)) {
+        delete sourceSettings.updateJobId;
+      } else {
+        delete sourceSettings.currentJobId;
+        sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.COMPLETE;
+        sourceSettings.lastJobDone = new Date().toISOString();
+      }
       sourceSettings.cursor = cursor;
       await this.#settingsStore.putSettings(sourceSettings);
     }
@@ -107,31 +105,43 @@ export class JobHelper {
   }
 
   /**
-   * Starts a new job returning the jobId
+   * Starts a new job returning the jobId or throws an Error if a job of the type is
+   * already running for the source
    * @param {string} sourceId
    * @param {string} type the job type to start, should be one of JobHelper.JOB_TYPE
    * @returns {Promise<string>} the jobId
    */
   async start(sourceId, type) {
+    let jobId;
+    let jobIdProperty;
+    const sourceSettings = await this.#getSettings(sourceId);
+
     if (type === JobHelper.JOB_TYPE.FULL) {
-      const sourceSettings = await this.#getSettings(sourceId);
-      if (sourceSettings.currentJobStatus === JobHelper.JOB_STATUS.RUNNING) {
-        // only allow one running job per source
-        throw new RestError(
-          409,
-          `Could not start extraction, job ${sourceSettings.currentJobId} is in status ${sourceSettings.currentJobStatus}`,
-        );
-      }
-      const jobId = `${JobHelper.JOB_TYPE.FULL}${randomUUID()}`;
+      jobId = `${JobHelper.JOB_TYPE.FULL}${randomUUID()}`;
       sourceSettings.currentJobId = jobId;
       sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.RUNNING;
       sourceSettings.currentJobStarted = new Date().toISOString();
-      sourceSettings.currentJobDone = '';
-      await this.#settingsStore.putSettings(sourceSettings);
-      return jobId;
+
+      jobIdProperty = 'fullJobId';
+    } else if (type === JobHelper.JOB_TYPE.UPDATE) {
+      jobId = `${JobHelper.JOB_TYPE.UPDATE}${randomUUID()}`;
+      sourceSettings.updateJobId = jobId;
     } else {
-      return `${JobHelper.JOB_TYPE.UPDATE}${randomUUID()}`;
+      throw new RestError(400, `Invalid job type ${type}`);
     }
+
+    try {
+      await this.#settingsStore.conditionalPutSettings(
+        sourceSettings,
+        `attribute_not_exists(${jobIdProperty})`,
+      );
+    } catch (err) {
+      throw new RestError(
+        409,
+        `A job is already running for source ${sourceId} of type ${type}, details ${err}`,
+      );
+    }
+    return jobId;
   }
 
   /**
@@ -142,8 +152,13 @@ export class JobHelper {
   async stop(jobId, sourceId) {
     const sourceSettings = await this.#getSettings(sourceId);
     if (JobHelper.isCurrentRunningJob(sourceSettings, jobId)) {
-      sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.STOPPED;
-      sourceSettings.currentJobDone = new Date().toISOString();
+      if (JobHelper.isUpdateJob(jobId)) {
+        delete sourceSettings.updateJobId;
+      } else {
+        sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.STOPPED;
+        sourceSettings.lastJobDone = new Date().toISOString();
+        delete sourceSettings.currentJobId;
+      }
       await this.#settingsStore.putSettings(sourceSettings);
     }
   }
