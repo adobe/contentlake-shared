@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-logger-v1.0.3](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-logger-v1.0.2...@adobe/contentlake-shared-logger-v1.0.3) (2023-07-20)
+
+
+### Bug Fixes
+
+* logger end status fix to not include an extra MESSAGE ([0e7ded8](https://github.com/adobe/contentlake-shared/commit/0e7ded817cf91fbd7f8f045be15ebde70a7271f2))
+
 # [@adobe/contentlake-shared-logger-v1.0.2](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-logger-v1.0.1...@adobe/contentlake-shared-logger-v1.0.2) (2023-07-20)
 
 
