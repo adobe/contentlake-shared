@@ -34,7 +34,9 @@
     "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
-    "@adobe/helix-shared-wrap": "^2.0.0"
+    "@adobe/content-lake-commons": "^1.9.0",
+    "@adobe/helix-shared-wrap": "^2.0.0",
+    "dotenv": "^16.3.1"
   },
   "peerDependencies": {
     "@adobe/helix-universal": ">=4.2.0"
