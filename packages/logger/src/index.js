@@ -93,7 +93,7 @@ export class OpsLog {
   logEnd(statusObj) {
     const duration = Date.now() - this.startTime;
     const statusMsg = statusObj?.statusText || 'Function ended';
-    this.info(`STATUS: ${statusObj?.status || 202} DURATION_MS: ${duration} MESSAGE: ${statusMsg}`);
+    this.#log.info(`${this.getLogHeader()} STATUS: ${statusObj?.status || 202} DURATION_MS: ${duration} MESSAGE: ${statusMsg}`);
   }
 }
 
