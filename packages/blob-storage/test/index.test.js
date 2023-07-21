@@ -89,7 +89,7 @@ describe('BlobStorage Unit Tests', () => {
       const blobs = await storage.list();
       assert.deepStrictEqual(blobs, {
         cursor: 'test-cursor',
-        hasMore: false,
+        hasMore: true,
         blobs: [
           {
             key: 'item0',
@@ -120,6 +120,18 @@ describe('BlobStorage Unit Tests', () => {
       assert.strictEqual(command.input.Bucket, 'unittest');
       assert.ok(!command.input.ContinuationToken);
       assert.ok(!command.input.Prefix);
+    });
+
+    it('returns no more when no content or truncation', async () => {
+      mockS3Client
+        .on(ListObjectsV2Command)
+        .resolves(mockListResponse(undefined, false, 0));
+      const blobs = await storage.list();
+      assert.deepStrictEqual(blobs, {
+        hasMore: false,
+        blobs: [],
+        cursor: undefined,
+      });
     });
 
     it('list blobs with empty object', async () => {
