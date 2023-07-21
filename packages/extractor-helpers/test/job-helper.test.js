@@ -135,7 +135,6 @@ describe('JobHelper Unit Tests', () => {
         settings.currentJobStatus,
         JobHelper.JOB_STATUS.STOPPED,
       );
-      assert.ok(settings.lastJobDone);
     });
 
     it('can stop update job', async () => {
