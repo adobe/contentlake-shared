@@ -27,7 +27,9 @@
   },
   "dependencies": {
     "@adobe/content-lake-commons": "^1.8.1",
-    "async": "^3.2.4"
+    "@adobe/content-lake-extractors-shared": "^3.1.12",
+    "async": "^3.2.4",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "nock": "^13.3.1"

@@ -80,6 +80,7 @@ export class JobHelper {
     if (JobHelper.isCurrentRunningJob(sourceSettings, jobId)) {
       if (JobHelper.isUpdateJob(jobId)) {
         delete sourceSettings.updateJobId;
+        sourceSettings.lastJobDone = new Date().toISOString();
       } else {
         delete sourceSettings.currentJobId;
         sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.COMPLETE;
@@ -118,13 +119,13 @@ export class JobHelper {
 
     if (type === JobHelper.JOB_TYPE.FULL) {
       jobId = `${JobHelper.JOB_TYPE.FULL}${randomUUID()}`;
+      jobIdProperty = 'currentJobId';
       sourceSettings.currentJobId = jobId;
       sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.RUNNING;
       sourceSettings.currentJobStarted = new Date().toISOString();
-
-      jobIdProperty = 'fullJobId';
     } else if (type === JobHelper.JOB_TYPE.UPDATE) {
       jobId = `${JobHelper.JOB_TYPE.UPDATE}${randomUUID()}`;
+      jobIdProperty = 'updateJobId';
       sourceSettings.updateJobId = jobId;
     } else {
       throw new RestError(400, `Invalid job type ${type}`);
@@ -156,7 +157,6 @@ export class JobHelper {
         delete sourceSettings.updateJobId;
       } else {
         sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.STOPPED;
-        sourceSettings.lastJobDone = new Date().toISOString();
         delete sourceSettings.currentJobId;
       }
       await this.#settingsStore.putSettings(sourceSettings);
