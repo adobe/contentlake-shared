@@ -25,7 +25,10 @@ config();
 const BUCKET = 'cl-commons-it-files';
 const TEST_BLOB_ID = 'test-blob.txt';
 const TEST_UPLOAD_BLOB_ID = 'test-upload-blob.webp';
-const DEFAULT_CONFIG = { ...(new ContextHelper(process).extractAwsConfig()), bucket: BUCKET };
+const DEFAULT_CONFIG = {
+  ...new ContextHelper(process).extractAwsConfig(),
+  bucket: BUCKET,
+};
 const SIGNED_URI_TTL = 60 * 15;
 
 /**
@@ -39,7 +42,12 @@ const SIGNED_URI_TTL = 60 * 15;
  * @param {string} contentType
  * @returns {Promise<string>} containing the HTTP response
  */
-async function uploadBytes(uri, buffer, size, contentType = 'application/octet-stream') {
+async function uploadBytes(
+  uri,
+  buffer,
+  size,
+  contentType = 'application/octet-stream',
+) {
   return new Promise((resolve, reject) => {
     const uploadOptions = {
       method: 'PUT',
@@ -48,22 +56,24 @@ async function uploadBytes(uri, buffer, size, contentType = 'application/octet-s
         'Content-Length': size,
       },
     };
-    const req = https.request(uri, uploadOptions, (res) => {
-      let response = '';
-      res.on('data', (chunk) => {
-        response += chunk;
+    const req = https
+      .request(uri, uploadOptions, (res) => {
+        let response = '';
+        res.on('data', (chunk) => {
+          response += chunk;
+        });
+        res.on('end', () => {
+          resolve(response);
+        });
+        assert.strictEqual(
+          200,
+          res.statusCode,
+          `Expected 201 status but got ${res.statusCode}`,
+        );
+      })
+      .on('error', (e) => {
+        reject(e);
       });
-      res.on('end', () => {
-        resolve(response);
-      });
-      assert.strictEqual(
-        200,
-        res.statusCode,
-        `Expected 201 status but got ${res.statusCode}`,
-      );
-    }).on('error', (e) => {
-      reject(e);
-    });
 
     req.write(buffer);
     req.end();
@@ -172,7 +182,10 @@ describe('Cloud Blob Storage integration tests', () => {
 
   it('Generate signed PUT URI generates a single valid signed URI for uploading', async () => {
     const blobStorage = new BlobStorage(DEFAULT_CONFIG);
-    const uri = await blobStorage.getSignedPutURI(TEST_UPLOAD_BLOB_ID, SIGNED_URI_TTL);
+    const uri = await blobStorage.getSignedPutURI(
+      TEST_UPLOAD_BLOB_ID,
+      SIGNED_URI_TTL,
+    );
     assert.ok(uri);
 
     const srcBlob = randomBytes(2048);
@@ -185,5 +198,23 @@ describe('Cloud Blob Storage integration tests', () => {
     } finally {
       await blobStorage.delete(TEST_UPLOAD_BLOB_ID);
     }
+  }).timeout(5000);
+
+  it('can list objects', async () => {
+    const blobStorage = new BlobStorage(DEFAULT_CONFIG);
+    const blobs = await blobStorage.list();
+    assert.ok(blobs);
+    assert.ok(blobs.blobs);
+  }).timeout(5000);
+
+  it('can list with prefix', async () => {
+    const blobStorage = new BlobStorage(DEFAULT_CONFIG);
+
+    await blobStorage.save('list-prefix.txt', Buffer.from('Hello World'));
+    const blobs = await blobStorage.list({
+      prefix: 'list-prefix',
+    });
+    assert.strictEqual(blobs.blobs.length, 1);
+    assert.strictEqual(blobs.blobs[0].key, 'list-prefix.txt');
   }).timeout(5000);
 });

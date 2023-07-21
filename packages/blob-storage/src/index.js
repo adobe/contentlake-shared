@@ -15,6 +15,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
   S3,
+  ListObjectsV2Command,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
@@ -119,6 +120,34 @@ export class BlobStorage {
       stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
     });
     return toString(body);
+  }
+
+  /**
+   * Lists the blobs in the container with an optional prefix and cursor
+   * @param {Object|undefined} config
+   * @param {string|undefined} config.cursor
+   * @param {string|undefined} config.prefix
+   */
+  async list(config) {
+    const { cursor, prefix } = config || {};
+    const blobs = await this.#s3client.send(
+      new ListObjectsV2Command({
+        Bucket: this.#bucket,
+        ContinuationToken: cursor,
+        Prefix: prefix,
+      }),
+    );
+    return {
+      cursor: blobs?.NextContinuationToken,
+      hasMore: blobs?.IsTruncated || blobs?.Contents?.length > 0,
+      blobs: blobs?.Contents?.map((blob) => ({
+        etag: blob.ETag,
+        key: blob.Key,
+        lastModified: blob.LastModified,
+        owner: blob.Owner,
+        size: blob.Size,
+      })),
+    };
   }
 
   /**
