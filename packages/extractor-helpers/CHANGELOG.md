@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-extractor-helpers-v1.1.2](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.1.1...@adobe/contentlake-shared-extractor-helpers-v1.1.2) (2023-07-21)
+
+
+### Bug Fixes
+
+* job conflict detection doesn't work ([500c7fe](https://github.com/adobe/contentlake-shared/commit/500c7fe5829868e4f0c87dee1238de8279da987a))
+
 # [@adobe/contentlake-shared-extractor-helpers-v1.1.1](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.1.0...@adobe/contentlake-shared-extractor-helpers-v1.1.1) (2023-07-20)
 
 
