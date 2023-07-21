@@ -15,3 +15,13 @@ export * as ingestor from './ingestor.js';
 export * from './job-helper.js';
 export * as batch from './batch-executor.js';
 export * from './batch-provider.js';
+
+export const EXTRACTOR_ACTIONS = Object.seal({
+  AUTHENTICATE: 'authenticate',
+  CALLBACK: 'callback',
+  ACCOUNT_UPDATE: 'account-update',
+  EXTRACT: 'extract',
+  EXTRACT_BATCH: 'extract-batch',
+  EXTRACT_FILE: 'extract-file',
+  UPDATE: 'update',
+});
