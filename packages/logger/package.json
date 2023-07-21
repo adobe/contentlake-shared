@@ -1,7 +1,7 @@
 {
-  "name": "@adobe/contentlake-shared-request-handler",
-  "version": "1.0.0",
-  "description": "Handler for SQS and REST Requests",
+  "name": "@adobe/contentlake-shared-logger",
+  "version": "1.0.3",
+  "description": "Logger for Asset Catalog Lambda Services",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -21,19 +21,15 @@
   "bugs": {
     "url": "https://github.com/adobe/contentlake-shared/issues"
   },
-  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/request-handler#readme",
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/logger#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@adobe/content-lake-commons": "^1.8.1",
-    "@adobe/helix-shared-wrap": "^2.0.0",
-    "@adobe/helix-status": "^10.0.9",
-    "@adobe/helix-universal-logger": "^3.0.10",
-    "node-fetch": "^2.6.11"
+    "@adobe/content-lake-commons": "^1.9.0"
   },
   "devDependencies": {
-    "nock": "^13.3.1",
-    "sinon": "^15.2.0"
+    "@adobe/fetch": "^4.0.13",
+    "@adobe/helix-shared-wrap": "^2.0.0"
   }
 }

@@ -26,6 +26,7 @@ describe('JobHelper Unit Tests', () => {
       currentJobId: 'FULL::test-job',
       currentJobStatus: 'RUNNING',
       currentJobStarted: new Date().toISOString(),
+      updateJobId: 'UPDATE::test-job',
     });
   });
 
@@ -34,7 +35,7 @@ describe('JobHelper Unit Tests', () => {
       await jobHelper.complete('FULL::test-job', 'test-source', 'test-cursor');
       const settings = await settingsStore.getSettings('test-source');
       assert.strictEqual(settings.cursor, 'test-cursor');
-      assert.ok(settings.currentJobDone);
+      assert.ok(settings.lastJobDone);
       assert.strictEqual(
         settings.currentJobStatus,
         JobHelper.JOB_STATUS.COMPLETE,
@@ -63,7 +64,7 @@ describe('JobHelper Unit Tests', () => {
         settings.currentJobStatus,
         JobHelper.JOB_STATUS.RUNNING,
       );
-      assert.ok(!settings.currentJobDone);
+      assert.ok(!settings.lastJobDone);
     });
   });
 
@@ -113,8 +114,15 @@ describe('JobHelper Unit Tests', () => {
     });
 
     it('cannot start with running job', async () => {
-      assert.rejects(() => jobHelper.start('test-source', 'FULL::'), {
+      settingsStore.conditionalFail = true;
+      await assert.rejects(() => jobHelper.start('test-source', 'FULL::'), {
         status: 409,
+      });
+    });
+
+    it('cannot start with invalid type', async () => {
+      await assert.rejects(() => jobHelper.start('test-source', 'NOT A TYPE'), {
+        status: 400,
       });
     });
   });
@@ -127,7 +135,14 @@ describe('JobHelper Unit Tests', () => {
         settings.currentJobStatus,
         JobHelper.JOB_STATUS.STOPPED,
       );
-      assert.ok(settings.currentJobDone);
+      assert.ok(settings.lastJobDone);
+    });
+
+    it('can stop update job', async () => {
+      await jobHelper.stop('UPDATE::test-job', 'test-source');
+      const settings = await settingsStore.getSettings('test-source');
+      assert.ok(!settings.updateJobId);
+      assert.ok(!settings.lastJobDone);
     });
 
     it('stop skips update job', async () => {
@@ -137,7 +152,7 @@ describe('JobHelper Unit Tests', () => {
         settings.currentJobStatus,
         JobHelper.JOB_STATUS.RUNNING,
       );
-      assert.ok(!settings.currentJobDone);
+      assert.ok(!settings.lastJobDone);
     });
 
     it('stop skips non-current job', async () => {
@@ -147,7 +162,7 @@ describe('JobHelper Unit Tests', () => {
         settings.currentJobStatus,
         JobHelper.JOB_STATUS.RUNNING,
       );
-      assert.ok(!settings.currentJobDone);
+      assert.ok(!settings.lastJobDone);
     });
   });
 });
