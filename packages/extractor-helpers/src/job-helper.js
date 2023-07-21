@@ -13,6 +13,9 @@
 import { randomUUID } from 'crypto';
 import { RestError } from '@adobe/content-lake-commons';
 
+const PROP_CURRENT_JOB_ID = 'currentJobId';
+const PROP_UPDATE_JOB_ID = 'updateJobId';
+
 /**
  * Helper for Extractor Jobs
  */
@@ -119,13 +122,13 @@ export class JobHelper {
 
     if (type === JobHelper.JOB_TYPE.FULL) {
       jobId = `${JobHelper.JOB_TYPE.FULL}${randomUUID()}`;
-      jobIdProperty = 'currentJobId';
+      jobIdProperty = PROP_CURRENT_JOB_ID;
       sourceSettings.currentJobId = jobId;
       sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.RUNNING;
       sourceSettings.currentJobStarted = new Date().toISOString();
     } else if (type === JobHelper.JOB_TYPE.UPDATE) {
       jobId = `${JobHelper.JOB_TYPE.UPDATE}${randomUUID()}`;
-      jobIdProperty = 'updateJobId';
+      jobIdProperty = PROP_UPDATE_JOB_ID;
       sourceSettings.updateJobId = jobId;
     } else {
       throw new RestError(400, `Invalid job type ${type}`);
