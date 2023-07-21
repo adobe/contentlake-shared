@@ -1,6 +1,6 @@
 {
   "name": "@adobe/contentlake-shared-blob-storage",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Blob storage library for Asset Catalog",
   "main": "src/index.js",
   "type": "module",
