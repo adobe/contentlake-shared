@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "c8 mocha",
+    "test": "c8 mocha test",
+    "test:integration": "mocha it",
     "lint": "eslint .",
     "clean": "rm -rf package-lock.json node_modules"
   },
@@ -27,15 +28,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@adobe/fetch": "^4.0.1",
     "@aws-sdk/client-s3": "^3.373.0",
     "@aws-sdk/s3-request-presigner": "^3.373.0",
-    "jsonwebtoken": "^9.0.0"
+    "aws-sdk-client-mock": "^3.0.0"
   },
   "devDependencies": {
-    "@adobe/helix-shared-wrap": "^2.0.0"
-  },
-  "peerDependencies": {
-    "@adobe/helix-universal": ">=4.2.0"
+    "@adobe/content-lake-commons": "^1.9.0",
+    "@adobe/helix-shared-wrap": "^2.0.0",
+    "dotenv": "^16.3.1"
   }
 }

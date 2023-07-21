@@ -139,8 +139,8 @@ export class BlobStorage {
     );
     return {
       cursor: blobs.NextContinuationToken,
-      hasMore: blobs.IsTruncated,
-      blobs: blobs.Contents.map((blob) => ({
+      hasMore: blobs.IsTruncated || blobs.Contents?.length > 0,
+      blobs: blobs.Contents?.map((blob) => ({
         etag: blob.ETag,
         key: blob.Key,
         lastModified: blob.LastModified,
