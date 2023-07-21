@@ -4,6 +4,9 @@
 			"path": "."
 		},
 		{
+			"path": "packages/blob-storage"
+		},
+		{
 			"path": "packages/extractor-helpers"
 		},
 		{
