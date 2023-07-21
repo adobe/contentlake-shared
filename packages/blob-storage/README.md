@@ -16,3 +16,9 @@ Install using:
 npm install @adobe/contentlake-shared-blob-storage
 ```
 
+```
+import { BlobStorage } from '@adobe/contentlake-shared-blob-storage'
+
+const blobStorage = new BlobStorage(config);
+const binary = await blobStorage.get('key')
+```
