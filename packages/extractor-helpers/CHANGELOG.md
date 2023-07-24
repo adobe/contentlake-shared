@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-extractor-helpers-v1.2.0](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.1.2...@adobe/contentlake-shared-extractor-helpers-v1.2.0) (2023-07-24)
+
+
+### Features
+
+* Adding the extractor action constants ([#25](https://github.com/adobe/contentlake-shared/issues/25)) ([fa40c16](https://github.com/adobe/contentlake-shared/commit/fa40c16b9031fda71a1411c8b29cdcf6bd60bfb0))
+
 # [@adobe/contentlake-shared-extractor-helpers-v1.1.2](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.1.1...@adobe/contentlake-shared-extractor-helpers-v1.1.2) (2023-07-21)
 
 
