@@ -3,7 +3,7 @@
     "lcov",
     "text"
   ],
-  "exclude": ["it/*", "test/*", "src/mocks/*", "scripts/*"],
+  "exclude": ["it/*", "test/*", "src/mock*", "scripts/*"],
   "check-coverage": true,
   "lines": 80,
   "branches": 80,
