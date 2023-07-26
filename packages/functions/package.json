@@ -1,0 +1,37 @@
+{
+  "name": "@adobe/contentlake-shared-functions",
+  "version": "0.0.1",
+  "description": "Library for invoking for Asset Catalog",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "c8 mocha",
+    "test:integration": "mocha it -- -g 'Integration'",
+    "lint": "eslint .",
+    "clean": "rm -rf package-lock.json node_modules"
+  },
+  "mocha": {
+    "reporter": "mocha-multi-reporters",
+    "reporter-options": "configFile=../../.mocha-multi.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/contentlake-shared"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/adobe/contentlake-shared/issues"
+  },
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/auth#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.377.0"
+  },
+  "devDependencies": {
+    "aws-sdk-client-mock": "^3.0.0",
+    "dotenv": "^16.3.1"
+  }
+}
