@@ -42,7 +42,9 @@ export class JobHelper {
     if (this.isUpdateJob(jobId)) {
       return sourceSettings.updateJobId === jobId;
     } else {
-      return sourceSettings.currentJobId === jobId;
+      return !sourceSettings.currentJobId
+        || (sourceSettings.currentJobId === jobId
+        && sourceSettings.currentJobStatus !== JobHelper.JOB_STATUS.STOPPED);
     }
   }
 
@@ -160,7 +162,6 @@ export class JobHelper {
         delete sourceSettings.updateJobId;
       } else {
         sourceSettings.currentJobStatus = JobHelper.JOB_STATUS.STOPPED;
-        delete sourceSettings.currentJobId;
       }
       await this.#settingsStore.putSettings(sourceSettings);
     }
