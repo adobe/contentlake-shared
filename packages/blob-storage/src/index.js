@@ -19,6 +19,8 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
+export { MockBlobStorage } from './mock.js';
+
 /**
  * @typedef {Object} BlobStorageConfig
  * @property {string} accessKeyId
@@ -26,6 +28,22 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
  * @property {string} [sessionToken]
  * @property {string} bucket
  * @property {S3} [client]
+ */
+
+/**
+ * @typedef {Object} Blob A representation of a blob from storage
+ * @property {string | undefined} etag
+ * @property {string | undefined} key
+ * @property {Date | undefined} lastModified
+ * @property {string | undefined} owner
+ * @property {number | undefined} size
+ */
+
+/**
+ * @typedef {Object} ListResponse
+ * @property {string | undefined} cursor
+ * @property {boolean} hasMore
+ * @property {Array<Blob>} blobs
  */
 
 const DEFAULT_DOWNLOAD_URI_TTL = 3600; // 1 hr
@@ -127,6 +145,7 @@ export class BlobStorage {
    * @param {Object|undefined} config
    * @param {string|undefined} config.cursor
    * @param {string|undefined} config.prefix
+   * @return {Promise<ListResponse>}
    */
   async list(config) {
     const { cursor, prefix } = config || {};

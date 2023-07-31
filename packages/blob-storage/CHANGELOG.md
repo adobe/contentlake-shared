@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-blob-storage-v1.2.0](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-blob-storage-v1.1.0...@adobe/contentlake-shared-blob-storage-v1.2.0) (2023-07-26)
+
+
+### Features
+
+* adding mocks for blob storage ([#29](https://github.com/adobe/contentlake-shared/issues/29)) ([a55f970](https://github.com/adobe/contentlake-shared/commit/a55f9701ed484bb481d40749233bbd1686b08d24))
+
 # [@adobe/contentlake-shared-blob-storage-v1.1.0](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-blob-storage-v1.0.0...@adobe/contentlake-shared-blob-storage-v1.1.0) (2023-07-21)
 
 
