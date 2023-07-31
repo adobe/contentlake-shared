@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-extractor-helpers-v1.2.1](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.2.0...@adobe/contentlake-shared-extractor-helpers-v1.2.1) (2023-07-31)
+
+
+### Bug Fixes
+
+* finish work queued after complete ([#32](https://github.com/adobe/contentlake-shared/issues/32)) ([8d17278](https://github.com/adobe/contentlake-shared/commit/8d17278368aadcd53c7cac7e624fc1b5fd5ebe2d))
+
 # [@adobe/contentlake-shared-extractor-helpers-v1.2.0](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.1.2...@adobe/contentlake-shared-extractor-helpers-v1.2.0) (2023-07-24)
 
 
