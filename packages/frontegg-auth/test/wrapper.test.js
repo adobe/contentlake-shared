@@ -45,14 +45,6 @@ describe('auth wrapper', () => {
     });
   });
 
-  it('should throw error if auth is passed to wrap().with() without invocation', async () => {
-    const universalFn = async () => new Response('ok');
-
-    assert.throws(() => {
-      wrap(universalFn).with(auth);
-    });
-  });
-
   it('should not throw error if auth() is invoked before passing to wrap().with()', async () => {
     const universalFn = async (request, context) => {
       // check that data is properly passed through
@@ -61,9 +53,7 @@ describe('auth wrapper', () => {
     };
 
     try {
-      const actualFn = wrap(universalFn).with(auth({
-        skip: true,
-      }));
+      const actualFn = wrap(universalFn).with(auth, { skip: true });
 
       await actualFn(new Request('http://localhost?foo=bar'), {
         log,
@@ -83,9 +73,7 @@ describe('auth wrapper', () => {
       wentThrough = true;
       return new Response('ok');
     };
-    const actualFn = wrap(universalFn).with(auth({
-      skipAuthorization: true,
-    }));
+    const actualFn = wrap(universalFn).with(auth, { skipAuthorization: true });
 
     const payload = {
       tenantIds: ['123'],
@@ -117,9 +105,7 @@ describe('auth wrapper', () => {
       wentThrough = true;
       return new Response('ok');
     };
-    const actualFn = wrap(universalFn).with(auth({
-      skipAuthorization: true,
-    }));
+    const actualFn = wrap(universalFn).with(auth, { skipAuthorization: true });
 
     const payload = {
       tenantIds: ['123'],
@@ -149,7 +135,7 @@ describe('auth wrapper', () => {
       wentThrough = true;
       return new Response('ok');
     };
-    const actualFn = wrap(universalFn).with(auth());
+    const actualFn = wrap(universalFn).with(auth);
 
     mockSpace('test.findmy.media', '123');
     const token = createJWT({
@@ -182,7 +168,7 @@ describe('auth wrapper', () => {
       wentThrough = true;
       return new Response('ok');
     };
-    const actualFn = wrap(universalFn).with(auth());
+    const actualFn = wrap(universalFn).with(auth);
 
     mockSpace('test.findmy.media', '123');
     const token = createJWT({
