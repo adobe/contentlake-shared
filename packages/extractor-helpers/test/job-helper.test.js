@@ -66,6 +66,11 @@ describe('JobHelper Unit Tests', () => {
       );
       assert.ok(!settings.lastJobDone);
     });
+
+    it('will still finish work after complete', async () => {
+      await jobHelper.complete('FULL::test-job', 'test-source', 'test-cursor');
+      assert.ok(!(await jobHelper.shouldStop('FULL::test-job', 'test-source')));
+    });
   });
 
   describe('shouldStop', () => {

@@ -12,14 +12,14 @@
 
 /* eslint-env mocha */
 import assert from 'assert';
-import { settings } from '@adobe/content-lake-extractors-shared';
 import dotenv from 'dotenv';
 import { randomUUID } from 'crypto';
+import { SettingsStore } from '../src/settings.js';
 import { JobHelper } from '../src/job-helper.js';
 
 dotenv.config();
 
-const settingsStore = new settings.SettingsStore(process.env);
+const settingsStore = new SettingsStore(process.env);
 const jobHelper = new JobHelper(settingsStore);
 const sources = [];
 let sourceId;
