@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-extractor-helpers-v1.3.0](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.2.1...@adobe/contentlake-shared-extractor-helpers-v1.3.0) (2023-08-07)
+
+
+### Features
+
+* migrating settings from extractors-shared ([#31](https://github.com/adobe/contentlake-shared/issues/31)) ([473f0bd](https://github.com/adobe/contentlake-shared/commit/473f0bd52bd919953d3be287136c84301c0779b3))
+
 # [@adobe/contentlake-shared-extractor-helpers-v1.2.1](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.2.0...@adobe/contentlake-shared-extractor-helpers-v1.2.1) (2023-07-31)
 
 
