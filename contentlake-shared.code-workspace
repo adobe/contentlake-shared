@@ -13,6 +13,9 @@
 			"path": "packages/frontegg-auth"
 		},
 		{
+			"path": "packages/functions"
+		},
+		{
 			"path": "packages/request-handler"
 		},
 		{
