@@ -15,6 +15,7 @@ export * as ingestor from './ingestor.js';
 export * from './job-helper.js';
 export * as batch from './batch-executor.js';
 export * from './batch-provider.js';
+export * from './settings.js';
 
 export const EXTRACTOR_ACTIONS = Object.seal({
   AUTHENTICATE: 'authenticate',
