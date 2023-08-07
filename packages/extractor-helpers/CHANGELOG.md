@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-extractor-helpers-v1.4.0](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.3.0...@adobe/contentlake-shared-extractor-helpers-v1.4.0) (2023-08-07)
+
+
+### Features
+
+* adding mocks for settings ([#38](https://github.com/adobe/contentlake-shared/issues/38)) ([9ac36e2](https://github.com/adobe/contentlake-shared/commit/9ac36e211b4f958f4f5a47f944f4c272cc0132a0))
+
 # [@adobe/contentlake-shared-extractor-helpers-v1.3.0](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-extractor-helpers-v1.2.1...@adobe/contentlake-shared-extractor-helpers-v1.3.0) (2023-08-07)
 
 
