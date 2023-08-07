@@ -1,6 +1,6 @@
 {
   "name": "@adobe/contentlake-shared-functions",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Library for invoking for Asset Catalog",
   "main": "src/index.js",
   "type": "module",
