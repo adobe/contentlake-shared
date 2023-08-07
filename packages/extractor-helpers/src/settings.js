@@ -18,6 +18,8 @@ import {
   QueryCommand,
 } from '@aws-sdk/client-dynamodb';
 
+export { MockSettingsStore } from './mocks/settings.js';
+
 /**
  * @typedef {Object} SettingsObject
  * @property {string} sourceId
