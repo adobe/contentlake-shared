@@ -47,7 +47,7 @@ import { handleAuthorization } from './authorization.js';
  * }
  *
  * export const main = wrap(run)
- *   .with(auth({ permissions: 'some-permission' }))
+ *   .with(auth, { permissions: 'some-permission' })
  *   .with(helixStatus);
  * ```
  *
@@ -123,33 +123,28 @@ export async function handleAuth(request, context, opts = {}) {
 }
 
 /**
- * A helix-shared-wrap middleware (wrapper function) that handles authentication
- * & authorization for all requests by calling {@link handleAuth}.
+ * Wraps a function with a Frontegg authentication and authorization middleware.
+ * Invokes {@link handleAuth} for all requests.
  *
- * Note that this must be invoked before being passed to `wrap().with(fn)`, unlike
- * other wrapper functions, in order to support passing of custom options:
  * ```
  * export const main = wrap(run)
  *    // minimal
- *   .with(auth());
+ *   .with(auth);
  *
  *    // alternatively with options
- *   .with(auth({ permissions: 'some-permission' }));
+ *   .with(auth, { permissions: 'some-permission' });
  * ```
  *
+ * @param {UniversalFunction} fn the universal function
  * @param {AuthOptions} [opts] Options
- * @returns {function} wrapper for use with @adobe/helix-shared-wrap
+ * @returns {function} an universal function with the added middleware
  */
-export function auth(opts = {}) {
-  if (typeof opts === 'function') {
-    throw new Error('Developer error: auth() must be invoked before being passed to wrap().with(*) and expects an opts object as argument: wrap().with(auth({}))');
-  }
-
-  return (func) => async (request, context) => {
+export function auth(fn, opts = {}) {
+  return async (request, context) => {
     // on auth failures, this will throw an error which helix-universal 4.2.0+
     // will catch and turn into a 401 or 403 http response.
     await handleAuth(request, context, opts);
 
-    return func(request, context);
+    return fn(request, context);
   };
 }
