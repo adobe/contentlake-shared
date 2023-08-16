@@ -22,6 +22,9 @@
 			"path": "packages/search-index"
 		},
 		{
+			"path": "packages/secrets-manager"
+		},
+		{
 			"path": "packages/logger"
 		}
 	],

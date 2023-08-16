@@ -1,0 +1,8 @@
+{
+  "reporter": [
+    "lcov",
+    "text"
+  ],
+  "exclude": ["it/*", "test/*", "src/mock.js"],
+  "check-coverage": true
+}

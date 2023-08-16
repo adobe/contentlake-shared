@@ -1,0 +1,36 @@
+{
+  "name": "@adobe/contentlake-shared-secrets-manager",
+  "version": "1.0.0",
+  "description": "Supports storing and retrieving custom secrets",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "c8 mocha",
+    "test:integration": "mocha it -- -g 'Integration'",
+    "lint": "eslint ."
+  },
+  "mocha": {
+    "reporter": "mocha-multi-reporters",
+    "reporter-options": "configFile=../../.mocha-multi.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/contentlake-shared"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/adobe/contentlake-shared/issues"
+  },
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/secrets-manager#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.290.0"
+  },
+  "devDependencies": {
+    "aws-sdk-client-mock": "^3.0.0",
+    "dotenv": "^16.3.1"
+  }
+}
