@@ -32,14 +32,15 @@ import { randomUUID } from 'crypto';
  * @property {string} sourceAssetId the ID of this asset as interpreted by the source system
  * @property {string} sourceType the source from which this asset was retrieved
  * @property {string} sourceId the source from which this asset was retrieved
- * @property {string | undefined} name the name of the asset as interpreted by the source repository
- * @property {number | undefined} size the size of the original asset in bytes
- * @property {Date | undefined} created the time at which the asset was created in the source
- * @property {string | undefined} createdBy an identifier for the principal which created the asset
- * @property {Date | undefined} lastModified the last time the asset was modified
- * @property {string | undefined} lastModifiedBy
+ * @property {string} [name] the name of the asset as interpreted by the source repository
+ * @property {number} [size] the size of the original asset in bytes
+ * @property {Date} [created] the time at which the asset was created in the source
+ * @property {string} [createdBy] an identifier for the principal which created the asset
+ * @property {Date} [lastModified] the last time the asset was modified
+ * @property {string} [lastModifiedBy]
  *  an identifier for the principal which last modified the asset
- * @property {string | undefined} path the path to the asset
+ * @property {string} [path] the path to the asset
+ * @property {string} [hash] a computed has of the binary
  * @property {BinaryRequest | undefined} [binary] If provided, information about the request
  *  that can be sent to retrieve the asset's binary data. If missing, the ingestion process will
  *  make a second call to the extractor to retrieve this information.
@@ -49,7 +50,7 @@ import { randomUUID } from 'crypto';
  * @typedef {Object} BinaryRequest
  *  A description of a HTTP request to make to retrieve a binary
  * @property {string} url the url to connect to in order to retrieve the binary
- * @property {Record<string,string> | undefined} [headers]
+ * @property {Record<string,string>} [headers]
  *  headers to send with the request to retrieve the binary
  */
 
@@ -97,12 +98,92 @@ export class IngestorClient {
   }
 
   /**
+   * Computes the etag for the specified data or undefined if no etag can be generated
+   * @param {SourceData} data The data to check
+   * @returns {Promise<boolean>} if true, no further action is required by the ingestor
+   */
+  static computeEtag(data) {
+    if (!data.hash) {
+      return undefined;
+    }
+    const { hash } = data;
+    return Buffer.from(JSON.stringify({ hash, metadata: data })).toString(
+      'base64',
+    );
+  }
+
+  /**
+   * Checks if the ingestor already has the specified file with the same metadata and binary
+   * @param {SourceData} data The data to check
+   * @returns {Promise<boolean>} if true, no further action is required by the ingestor
+   */
+  async checkCurrent(data) {
+    const start = Date.now();
+    const etag = IngestorClient.computeEtag(data);
+    const requestId = randomUUID();
+    const { spaceId, companyId, jobId } = this.#config;
+
+    const { sourceId, sourceAssetId } = data;
+
+    const requestInfo = IngestorClient.#filterAndMerge(
+      data,
+      ['sourceAssetId', 'sourceId', 'sourceType', 'name'],
+      {
+        etag,
+        jobId,
+        companyId,
+        spaceId,
+        requestId,
+      },
+    );
+    this.#log.debug('Submitting for ingestion', {
+      url: this.#config.url,
+      ...requestInfo,
+    });
+
+    const res = await this.#client.fetch(
+      `${this.#config.url}/${sourceId}/${sourceAssetId}`,
+      {
+        headers: {
+          'If-None-Match': etag,
+          'x-api-key': this.#config.apiKey,
+          'x-job-id': jobId,
+          'x-request-id': requestId,
+          'x-company-id': companyId,
+          'x-space-id': spaceId,
+        },
+        method: 'HEAD',
+      },
+    );
+    this.#log.info('Retrieved status', {
+      responseStatus: res.status,
+      duration: Date.now() - start,
+      ...requestInfo,
+    });
+    switch (res.status) {
+      case 200:
+        this.#log.debug('Not current', requestInfo);
+        return false;
+      case 304:
+        this.#log.debug('Current', requestInfo);
+        return true;
+      default:
+        this.#log.debug('Invalid response status', {
+          responseStatus: res.status,
+          ...requestInfo,
+        });
+        return false;
+    }
+  }
+
+  /**
    * Submits the request for ingestion
    * @param {IngestionRequest} request the request containing the data to ingest
    * @returns {Promise<IngestionResponse>} the response from the ingestion service
    */
   async submit(request) {
     const start = Date.now();
+    const etag = IngestorClient.computeEtag(request.data);
 
     const requestId = randomUUID();
     const { spaceId, companyId, jobId } = this.#config;
@@ -112,6 +193,7 @@ export class IngestorClient {
       ['sourceAssetId', 'sourceId', 'sourceType', 'name'],
       {
         jobId,
+        etag,
         companyId,
         spaceId,
         requestId,
@@ -126,13 +208,17 @@ export class IngestorClient {
     const res = await this.#client.fetch(this.#config.url, {
       headers: {
         'Content-Type': 'application/json',
+        'If-None-Match': etag,
         'x-api-key': this.#config.apiKey,
         'x-job-id': jobId,
         'x-request-id': requestId,
+        'x-company-id': companyId,
+        'x-space-id': spaceId,
       },
       method: 'POST',
       body: JSON.stringify({
         ...request,
+        etag,
         jobId,
         companyId,
         spaceId,
