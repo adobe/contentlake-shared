@@ -1,3 +1,10 @@
+# [@adobe/contentlake-shared-blob-storage-v1.2.1](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-blob-storage-v1.2.0...@adobe/contentlake-shared-blob-storage-v1.2.1) (2023-08-17)
+
+
+### Bug Fixes
+
+* fixing blob storage dependencies ([#44](https://github.com/adobe/contentlake-shared/issues/44)) ([d75950d](https://github.com/adobe/contentlake-shared/commit/d75950d6ffdcd8288835891001d81743c799e685))
+
 # [@adobe/contentlake-shared-blob-storage-v1.2.0](https://github.com/adobe/contentlake-shared/compare/@adobe/contentlake-shared-blob-storage-v1.1.0...@adobe/contentlake-shared-blob-storage-v1.2.0) (2023-07-26)
 
 
