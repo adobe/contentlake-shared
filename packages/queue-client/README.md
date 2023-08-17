@@ -1,6 +1,6 @@
-# Content Lake Shared - blob-storage
+# Content Lake Shared - Queue Client
 
-> Blob storage library for Asset Catalog
+> Queue library for Asset Catalog
 
 This is one of the [Content Lake Shared](https://github.com/adobe/contentlake-shared) libraries.
 
@@ -13,12 +13,14 @@ This is one of the [Content Lake Shared](https://github.com/adobe/contentlake-sh
 Install using:
 
 ```
-npm install @adobe/contentlake-shared-blob-storage
+npm install @adobe/contentlake-shared-queue-client
 ```
 
 ```
-import { BlobStorage } from '@adobe/contentlake-shared-blob-storage'
+import { QueueClient } from '@adobe/contentlake-shared-queue-client'
 
-const blobStorage = new BlobStorage(config);
-const binary = await blobStorage.get('key')
+const queueClient = new QueueClient({
+    queueUrl: 'https://somequeue.com'
+});
+await queueClient.sendMessage({ message: 'Hello World' });
 ```
