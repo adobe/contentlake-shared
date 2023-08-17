@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/adobe/contentlake-shared/issues"
   },
-  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/blobl-storage#readme",
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/blob-storage#readme",
   "publishConfig": {
     "access": "public"
   },
