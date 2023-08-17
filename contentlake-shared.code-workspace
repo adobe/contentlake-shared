@@ -16,6 +16,9 @@
 			"path": "packages/functions"
 		},
 		{
+			"path": "packages/queue-client"
+		},
+		{
 			"path": "packages/request-handler"
 		},
 		{
