@@ -23,18 +23,16 @@
   "bugs": {
     "url": "https://github.com/adobe/contentlake-shared/issues"
   },
-  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/auth#readme",
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/blobl-storage#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.373.0",
-    "@aws-sdk/s3-request-presigner": "^3.373.0",
-    "aws-sdk-client-mock": "^3.0.0"
+    "@aws-sdk/s3-request-presigner": "^3.373.0"
   },
   "devDependencies": {
-    "@adobe/content-lake-commons": "^1.9.0",
-    "@adobe/helix-shared-wrap": "^2.0.0",
+    "aws-sdk-client-mock": "^3.0.0",
     "dotenv": "^16.3.1"
   }
 }
