@@ -17,7 +17,6 @@ import assert from 'assert';
 import { config } from 'dotenv';
 import https from 'https';
 import { randomBytes } from 'crypto';
-import { ContextHelper } from '@adobe/content-lake-commons';
 import { BlobStorage } from '../src/index.js';
 
 config();
@@ -26,7 +25,6 @@ const BUCKET = 'cl-commons-it-files';
 const TEST_BLOB_ID = 'test-blob.txt';
 const TEST_UPLOAD_BLOB_ID = 'test-upload-blob.webp';
 const DEFAULT_CONFIG = {
-  ...new ContextHelper(process).extractAwsConfig(),
   bucket: BUCKET,
 };
 const SIGNED_URI_TTL = 60 * 15;
