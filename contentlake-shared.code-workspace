@@ -22,6 +22,9 @@
 			"path": "packages/request-handler"
 		},
 		{
+			"path": "packages/rest-error"
+		},
+		{
 			"path": "packages/search-index"
 		},
 		{
