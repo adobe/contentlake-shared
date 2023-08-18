@@ -95,6 +95,7 @@ describe('Search Index tests', async () => {
     };
     const searchIndexStorage2 = new SearchIndex(context, 'test-company-id');
     assert.strictEqual(searchIndexStorage2.getIndexName(), 'company-details-test-company-id');
+    stub(SearchIndex.prototype, 'getClient').returns(new MockAlgoliaSearch());
   });
 
   it('check if item exists requires a contentHash', async () => {
@@ -256,5 +257,32 @@ describe('Search Index tests', async () => {
 
     const deleteByParams = await searchIndexStorage.deleteBy('contentHash', contentRecord.contentHash);
     assert.deepStrictEqual(deleteByParams, { filters: `contentHash:${contentRecord.contentHash}` });
+  });
+
+  it('copy index works', async () => {
+    const copyResult = await searchIndexStorage.copyIndex('test-index', []);
+    assert.equal('mockedTaskId', copyResult.taskID);
+  });
+
+  it('copy index  with scop works', async () => {
+    const copyResult = await searchIndexStorage.copyIndex('test-index', [
+      'settings',
+    ]);
+    assert.equal('mockedTaskId', copyResult.taskID);
+  });
+
+  it('copy index settings works', async () => {
+    const copyResult = await searchIndexStorage.copySettings('test-index');
+    assert.equal(undefined, copyResult);
+  });
+
+  it('move index works', async () => {
+    const moveResult = await searchIndexStorage.moveIndex('test-index');
+    assert.equal('mockedTaskId', moveResult.taskID);
+  });
+
+  it('wait tasks works', async () => {
+    const waitResult = await searchIndexStorage.waitTask('task-id');
+    assert.equal(undefined, waitResult);
   });
 });

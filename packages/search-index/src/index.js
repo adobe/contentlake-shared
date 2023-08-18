@@ -50,24 +50,25 @@ export class SearchIndex {
   #log;
   index;
   #indexName;
+  #indexClient;
 
   constructor(context, companyId) {
     this.#indexName = context.env.ALGOLIA_CI_INDEX || `${this.#INDEX_PREFIX}-${companyId}`;
     this.#log = new ContextHelper(context).getLog();
     this.#log.info('Using Search Index', this.#indexName);
-
-    this.index = this.getClient(context).initIndex(this.#indexName);
+    this.#indexClient = algoliasearch(
+      context.env.ALGOLIA_APP_NAME,
+      context.env.ALGOLIA_API_KEY,
+    );
+    this.index = this.getClient().initIndex(this.#indexName);
   }
 
   getIndexName() {
     return this.#indexName;
   }
 
-  getClient(context) {
-    return algoliasearch(
-      context.env.ALGOLIA_APP_NAME,
-      context.env.ALGOLIA_API_KEY,
-    );
+  getClient() {
+    return this.#indexClient;
   }
 
   /**
@@ -271,5 +272,50 @@ export class SearchIndex {
       filters: `${key}:${value}`,
     };
     return this.index.deleteBy(params, options);
+  }
+
+  /**
+   * Copy an index
+   *
+   * @param {String} destinationIndexName name of the destination index
+   * @returns {Object} the JSON response returned by the API.
+   * @see https://www.algolia.com/doc/api-reference/api-methods/copy-index
+   */
+  copyIndex(destinationIndexName, scope) {
+    if (scope && scope.length > 0) {
+      return this.getClient().copyIndex(this.#indexName, destinationIndexName, scope);
+    } else {
+      return this.getClient().copyIndex(this.#indexName, destinationIndexName);
+    }
+  }
+
+  /**
+   * Copy index settings
+   * @param {String} destinationIndexName name of the destination index
+   * @returns This method doesn't return a response.
+   * @see https://www.algolia.com/doc/api-reference/api-methods/copy-settings/
+   */
+  copySettings(destinationIndexName) {
+    this.getClient().copySettings(this.#indexName, destinationIndexName);
+  }
+
+  /**
+   * Move or rename an index
+   * @param {String} destinationIndexName name of the destination index
+   * @returns {Object} the JSON response returned by the API.
+   * @see https://www.algolia.com/doc/api-reference/api-methods/move-index
+   */
+  moveIndex(destinationIndexName) {
+    return this.getClient().moveIndex(this.#indexName, destinationIndexName);
+  }
+
+  /**
+   * For a given taskID for algolia async job, wait for the task to complete
+   * @param {String} taskID the algolia taskID to wait for
+   * @returns {Promise<void>} resolves when the task is complete
+   * @see https://www.algolia.com/doc/api-reference/api-methods/wait-task/
+   */
+  waitTask(taskID) {
+    return this.index.waitTask(taskID);
   }
 }
