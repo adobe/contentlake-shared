@@ -12,17 +12,29 @@
 export class MockQueueClient {
   messages = [];
 
+  removed = [];
+
   async sendMessage(message) {
     const id = this.messages.push(message);
     return id.toString();
   }
 
+  /**
+   * Reads the message, reading from blob storage if required
+   * @param {string} messageBody
+   * @returns {Promise<Object>}
+   */
   // eslint-disable-next-line class-methods-use-this
-  async removeMessage() {
-    // do nothing
+  async readMessageBody(messageBody) {
+    return JSON.parse(messageBody);
+  }
+
+  async removeMessage(receiptHandle) {
+    this.removed.push(receiptHandle);
   }
 
   reset() {
     this.messages = [];
+    this.removed = [];
   }
 }

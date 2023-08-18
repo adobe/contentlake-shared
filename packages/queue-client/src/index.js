@@ -68,7 +68,7 @@ export class QueueClient {
   /**
    * Gets the queue records from the context
    * @param {import('@adobe/helix-universal').UniversalContext} context
-   * @returns {Array<import('./queue.js').QueueRecord>} the queue records
+   * @returns {Array<QueueRecord>} the queue records
    */
   static extractQueueRecords(context) {
     return context.invocation?.event?.Records || [];
