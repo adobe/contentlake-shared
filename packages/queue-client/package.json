@@ -1,0 +1,38 @@
+{
+  "name": "@adobe/contentlake-shared-queue-client",
+  "version": "1.2.0",
+  "description": "Queue library for Asset Catalog",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "c8 mocha test",
+    "test:integration": "mocha it",
+    "lint": "eslint .",
+    "clean": "rm -rf package-lock.json node_modules"
+  },
+  "mocha": {
+    "reporter": "mocha-multi-reporters",
+    "reporter-options": "configFile=../../.mocha-multi.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/contentlake-shared"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/adobe/contentlake-shared/issues"
+  },
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/queue-client#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@adobe/contentlake-shared-blob-storage": "^1.2.0",
+    "@aws-sdk/client-sqs": "^3.391.0"
+  },
+  "devDependencies": {
+    "aws-sdk-client-mock": "^3.0.0",
+    "dotenv": "^16.3.1"
+  }
+}
