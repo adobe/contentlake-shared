@@ -1,0 +1,32 @@
+{
+  "name": "@adobe/contentlake-shared-rest-error",
+  "version": "1.0.0",
+  "description": "Error type for returning rfc9457 problem responses",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "c8 mocha",
+    "lint": "eslint ."
+  },
+  "mocha": {
+    "reporter": "mocha-multi-reporters",
+    "reporter-options": "configFile=../../.mocha-multi.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/contentlake-shared"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/adobe/contentlake-shared/issues"
+  },
+  "homepage": "https://github.com/adobe/contentlake-shared/tree/main/packages/rest-error#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@adobe/helix-universal": "^4.3.0",
+    "node-fetch": "^2.6.11"
+  }
+}
