@@ -38,10 +38,10 @@
     "husky": "8.0.3",
     "jsdoc-to-markdown": "8.0.0",
     "jsdoc-tsimport-plugin": "^1.0.5",
-    "lint-staged": "13.2.3",
+    "lint-staged": "13.3.0",
     "mocha": "10.2.0",
     "mocha-multi-reporters": "1.5.1",
-    "nock": "13.3.2",
+    "nock": "13.3.3",
     "semantic-release": "^19.0.2",
     "semantic-release-monorepo": "7.0.5"
   },
