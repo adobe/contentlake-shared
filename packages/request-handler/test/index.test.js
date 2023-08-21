@@ -14,9 +14,10 @@
 /* eslint-disable class-methods-use-this */
 import { createHash, randomUUID } from 'crypto';
 import assert from 'assert';
-import { stub } from 'sinon';
+import { MockQueueClient } from '@adobe/contentlake-shared-queue-client';
 import { RequestHandler } from '../src/index.js';
 
+const mockQueueClient = new MockQueueClient();
 const MOCK_REQUEST = new Request('http://localhost', { method: 'POST' });
 function mockContext(event) {
   return {
@@ -27,6 +28,7 @@ function mockContext(event) {
       QUEUE_URL: 'http://testqueue.com',
       QUEUE_STORAGE_BUCKET: 'queue-test',
     },
+    queueClient: mockQueueClient,
   };
 }
 
@@ -48,6 +50,7 @@ function mockSqsRecord(action) {
 }
 
 describe('Request Handler Tests', () => {
+  afterEach(() => mockQueueClient.reset());
   describe('main', () => {
     it('can get main', () => {
       const requestHandler = new RequestHandler();
@@ -57,9 +60,9 @@ describe('Request Handler Tests', () => {
 
     it('main requires context / request', async () => {
       const requestHandler = new RequestHandler();
-      const main = requestHandler.getMain();
       let caught;
       try {
+        const main = requestHandler.getMain();
         await main(undefined, undefined);
       } catch (err) {
         caught = err;
@@ -72,7 +75,10 @@ describe('Request Handler Tests', () => {
         throw new Error('Surprise!');
       });
       const main = requestHandler.getMain();
-      const res = await main(MOCK_REQUEST, mockContext({ action: 'throw' }));
+      const res = await main(MOCK_REQUEST, {
+        ...mockContext({ action: 'throw' }),
+        queueClient: undefined,
+      });
       assert.strictEqual(res.status, 500);
     });
 
@@ -94,19 +100,13 @@ describe('Request Handler Tests', () => {
         'test',
         () => new Response(),
       );
-      let caught;
-      try {
-        await requestHandler.handleEvent(
-          {
-            payload: 'Hello World',
-          },
-          mockContext(),
-        );
-      } catch (err) {
-        caught = err;
-      }
-      assert.ok(caught);
-      assert.strictEqual(caught.status, 400);
+      const res = await requestHandler.main(
+        MOCK_REQUEST,
+        mockContext({
+          payload: 'Hello World',
+        }),
+      );
+      assert.strictEqual(res.status, 400);
     });
 
     it('will throw on unknown action', async () => {
@@ -114,14 +114,13 @@ describe('Request Handler Tests', () => {
         'test',
         () => new Response(),
       );
-      let caught;
-      try {
-        await requestHandler.handleEvent({ action: 'test2' }, mockContext());
-      } catch (err) {
-        caught = err;
-      }
-      assert.ok(caught);
-      assert.strictEqual(caught.status, 400);
+      const res = await requestHandler.main(
+        MOCK_REQUEST,
+        mockContext({
+          action: 'test2',
+        }),
+      );
+      assert.strictEqual(res.status, 400);
     });
 
     it('will not fail to destructure on undefined event', async () => {
@@ -129,14 +128,13 @@ describe('Request Handler Tests', () => {
         'test',
         () => new Response(),
       );
-      let caught;
-      try {
-        await requestHandler.handleEvent(undefined, mockContext());
-      } catch (err) {
-        caught = err;
-      }
-      assert.ok(caught);
-      assert.strictEqual(caught.status, 400);
+      const res = await requestHandler.main(MOCK_REQUEST, {
+        ...mockContext(),
+        invocation: {
+          event: undefined,
+        },
+      });
+      assert.strictEqual(res.status, 400);
     });
 
     it('can add/invoke actions', async () => {
@@ -162,11 +160,6 @@ describe('Request Handler Tests', () => {
         return new Response();
       });
 
-      const removed = [];
-      stub(requestHandler, 'getQueueClient').returns({
-        removeMessage: (handle) => removed.push(handle),
-        readMessageBody: (msgBody) => JSON.parse(msgBody),
-      });
       const main = requestHandler.getMain();
       const res = await main(
         MOCK_REQUEST,
@@ -177,7 +170,7 @@ describe('Request Handler Tests', () => {
       assert.ok(res.ok);
       assert.strictEqual(res.status, 200);
       assert.strictEqual(events.length, 2);
-      assert.strictEqual(removed.length, 2);
+      assert.strictEqual(mockQueueClient.removed.length, 2);
     });
 
     it('can handle SQS record(s) with failures', async () => {
@@ -196,57 +189,52 @@ describe('Request Handler Tests', () => {
           throw new Error('bad news');
         });
 
-      const removed = [];
-      stub(requestHandler, 'getQueueClient').returns({
-        removeMessage: (handle) => removed.push(handle),
-        readMessageBody: (msgBody) => JSON.parse(msgBody),
-      });
       const main = requestHandler.getMain();
-      const res = await main(
-        MOCK_REQUEST,
-        mockContext({
+      const res = await main(MOCK_REQUEST, {
+        ...mockContext({
           Records: [
             mockSqsRecord('test'),
             mockSqsRecord('fail'),
             mockSqsRecord('throw'),
           ],
         }),
-      );
+        log: console,
+      });
       assert.ok(res.ok);
       assert.strictEqual(res.status, 206);
       const body = await res.json();
       assert.strictEqual(body.batchItemFailures.length, 2);
       assert.strictEqual(events.length, 3);
-      assert.strictEqual(removed.length, 1);
-    });
-  });
-
-  describe('getQueueClient', () => {
-    it('can get queue client', async () => {
-      const requestHandler = new RequestHandler();
-      const queueClient = requestHandler.getQueueClient(mockContext());
-      assert.ok(queueClient);
+      assert.strictEqual(mockQueueClient.removed.length, 1);
     });
 
-    it('can get queue client without bucket', async () => {
-      const requestHandler = new RequestHandler();
-      const queueClient = requestHandler.getQueueClient({
-        env: {
-          QUEUE_URL: 'http://test.queue.com',
+    it('handles failures reading response body', async () => {
+      const events = [];
+      const requestHandler = new RequestHandler().withHandler(
+        'bad-body',
+        (evt) => {
+          events.push(evt);
+          return {
+            text() {
+              throw Error();
+            },
+          };
         },
-      });
-      assert.ok(queueClient);
-    });
+      );
 
-    it('getQueueClient requires queue url', async () => {
-      const requestHandler = new RequestHandler();
-      let caught;
-      try {
-        requestHandler.getQueueClient({ env: {} });
-      } catch (err) {
-        caught = err;
-      }
-      assert.ok(caught);
+      const main = requestHandler.getMain();
+      const res = await main(
+        MOCK_REQUEST,
+        mockContext({
+          Records: [mockSqsRecord('bad-body')],
+        }),
+      );
+      assert.ok(res.ok);
+      assert.strictEqual(res.status, 206);
+      const body = await res.json();
+      assert.strictEqual(body.batchItemFailures.length, 1);
+      assert.strictEqual(events.length, 1);
+      assert.strictEqual(mockQueueClient.removed.length, 0);
     });
   });
 });
