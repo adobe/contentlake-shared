@@ -10,21 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-import {
-  BlobStorage,
-  ContextHelper,
-  QueueClient,
-  RestError,
-} from '@adobe/content-lake-commons';
+import { RestError } from '@adobe/contentlake-shared-rest-error';
 import wrap from '@adobe/helix-shared-wrap';
 import { helixStatus } from '@adobe/helix-status';
 import { logger } from '@adobe/helix-universal-logger';
-import { Response } from 'node-fetch';
+import { RequestHandlerInternal } from './internal.js';
 
 /**
  * @callback HandlerFn
  * @param {Record<string,any>} event the event to handle
- * @param {import('@adobe/content-lake-commons').contextHelper.UniversalishContext} context
+ * @param {import('@adobe/helix-universal').UniversalContext} context
  *  the current context
  * @returns {Promise<Response>} the response from handling the request
  */
@@ -41,7 +36,7 @@ export class RequestHandler {
   #wrapFn;
 
   /**
-   * @type {HandlerFn}
+   * @type {Record<string,HandlerFn>}
    */
   #handlers = {};
 
@@ -61,30 +56,7 @@ export class RequestHandler {
    * @returns {function(Request,UniversalContext):Promise<Response>} the main function
    */
   getMain() {
-    let main = wrap(async (request, context) => {
-      const helper = new ContextHelper(context);
-      const log = helper.getLog();
-      let res;
-      const { method, url } = request;
-      const loggableRequest = {
-        method,
-        url,
-        headers: Object.fromEntries(request.headers),
-        invocation: context?.invocation,
-        event: helper.extractOriginalEvent(),
-      };
-      const start = Date.now();
-      try {
-        log.debug(`> ${method} ${url}`);
-        log.debug('Handling request', loggableRequest);
-        res = await this.handleRequest(context);
-      } catch (err) {
-        log.warn('Exception handling request', { ...loggableRequest, err });
-        res = RestError.toProblemResponse(err);
-      }
-      log.info(`< ${method} ${res.status} ${url} ${Date.now() - start}ms`);
-      return res;
-    });
+    let main = wrap(async (request, context) => this.main(request, context));
     if (this.#wrapFn) {
       main = main.with(this.#wrapFn);
     }
@@ -92,126 +64,35 @@ export class RequestHandler {
   }
 
   /**
-   * Get the queue client for the specified request
-   * @param {any} context  Context for the current execution is running.
-   * @returns {QueueClient} the queue client
+   * @param {Request} request
+   * @param {import('@adobe/helix-universal').UniversalContext} context
+   * @returns {Promise<Response>}
    */
-  // eslint-disable-next-line class-methods-use-this
-  getQueueClient(context) {
-    const helper = new ContextHelper(context);
-    const queueUrl = context.env.QUEUE_URL;
-    if (!queueUrl) {
-      throw new Error('Missing ENV variable QUEUE_URL');
-    }
-    let blobStorage;
-    const queueStorageBucket = context.env.QUEUE_STORAGE_BUCKET;
-    if (queueStorageBucket) {
-      blobStorage = new BlobStorage({
-        ...helper.extractAwsConfig(context),
-        bucket: queueStorageBucket,
-      });
-    }
-    return new QueueClient({
-      ...helper.extractAwsConfig(context),
-      queueUrl,
-      blobStorage,
-    });
-  }
-
-  /**
-   * Handles a request that comes into an extractor's HTTP service.
-   * @param {any} context Context for the current execution is running.
-   * @returns {Promise<Response>} Resolves with the response that the service
-   *  will provide
-   */
-  async handleRequest(context) {
-    const helper = new ContextHelper(context);
-    const log = helper.getLog();
-
-    if (helper.isQueueRequest()) {
-      const queueClient = this.getQueueClient(context);
-      const records = helper.extractQueueRecords();
-      log.debug('Handing queue records', { count: records.length });
-
-      const results = await Promise.allSettled(
-        records.map((qr) => this.handleQueueRecord(context, qr, queueClient, log)),
-      );
-
-      const batchItemFailures = results
-        .filter((r) => r.status === 'rejected')
-        .map((fail) => fail.reason)
-        .map((itemIdentifier) => ({ itemIdentifier }));
-      if (batchItemFailures.length === 0) {
-        log.debug('All batch items processed successfully');
-        return new Response();
-      } else {
-        log.info('Failed to process batch items', {
-          items: batchItemFailures,
-          count: batchItemFailures.length,
-        });
-        return new Response(
-          JSON.stringify({
-            batchItemFailures,
-          }),
-          { status: 206 },
-        );
-      }
-    } else {
-      log.debug('Handing POST payload');
-      const event = helper.extractOriginalEvent();
-      return this.handleEvent(event, context);
-    }
-  }
-
-  /**
-   * Handles a single event
-   * @param {Record<string,any>} event the event to handle
-   * @param {import('@adobe/content-lake-commons').contextHelper.UniversalishContext} context
-   *  the current context
-   * @returns {Promise<Response>} the response from handling the event
-   */
-  async handleEvent(event, context) {
-    const { action } = event || {};
-    if (!action) {
-      throw new RestError(400, 'Missing parameter [action]');
-    }
-    if (!this.#handlers[action]) {
-      throw new RestError(400, `Invalid action [${action}]`);
-    }
-    return this.#handlers[action](event, context);
-  }
-
-  /**
-   * Handles a queue event record
-   * @param {import('@adobe/content-lake-commons').contextHelper.UniversalishContext} context
-   * @param {import('@adobe/content-lake-commons').QueueRecord} record
-   * @param {QueueClient} queueClient
-   * @param {import('@adobe/content-lake-commons').contextHelper.Logger} log
-   * @returns {Promise<void>}
-   */
-  async handleQueueRecord(context, record, queueClient, log) {
+  async main(request, context) {
+    const log = context.log || console;
+    let res;
+    const { method, url } = request;
+    const loggableRequest = {
+      method,
+      url,
+      headers: Object.fromEntries(request.headers),
+      invocation: context?.invocation,
+    };
+    const start = Date.now();
     try {
-      log.debug('Handling queue record', {
-        record,
-      });
-      const event = await queueClient.readMessageBody(record.body);
-      const res = await this.handleEvent(event, context);
-      if (res.ok) {
-        log.debug('Record handled successfully, removing from queue', {
-          record,
-        });
-        await queueClient.removeMessage(record.receiptHandle);
-      } else {
-        log.warn('Record handling unsuccessful', {
-          record,
-          res,
-        });
-        throw record.messageId;
-      }
+      log.debug(`> ${method} ${url}`);
+      log.debug('Handling request', loggableRequest);
+      const internalHandler = new RequestHandlerInternal(
+        context,
+        this.#handlers,
+      );
+      res = await internalHandler.handle();
     } catch (err) {
-      log.warn('Failed to handle queue record', { record, err });
-      throw record.messageId;
+      log.warn('Exception handling request', { ...loggableRequest, err });
+      res = RestError.toProblemResponse(err, context);
     }
+    log.info(`< ${method} ${res.status} ${url} ${Date.now() - start}ms`);
+    return res;
   }
 
   /**
