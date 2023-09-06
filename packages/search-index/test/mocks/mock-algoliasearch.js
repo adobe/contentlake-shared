@@ -63,4 +63,23 @@ export class MockAlgoliaSearch {
     // no need to implement this logic for now. Just make sure this method was called
     return params;
   }
+
+  copyIndex(indexName, destinationIndexName, scope) {
+    console.log(`Mocked copy index ${indexName} to ${destinationIndexName} with scope ${scope}`);
+    return { taskID: 'mockedTaskId' };
+  }
+
+  copySettings(indexName, destinationIndexName) {
+    console.log(`Mocked copy index settings ${indexName} to ${destinationIndexName}`);
+  }
+
+  moveIndex(indexName, destinationIndexName) {
+    console.log(`Mocked move index ${indexName} to ${destinationIndexName}`);
+    return { taskID: 'mockedTaskId' };
+  }
+
+  waitTask(taskID) {
+    console.log(`Mock wait task ${taskID} finish`);
+    return undefined;
+  }
 }
