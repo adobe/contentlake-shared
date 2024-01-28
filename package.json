@@ -41,7 +41,7 @@
     "lint-staged": "13.3.0",
     "mocha": "10.2.0",
     "mocha-multi-reporters": "1.5.1",
-    "nock": "13.5.0",
+    "nock": "13.5.1",
     "semantic-release": "^19.0.2",
     "semantic-release-monorepo": "7.0.8"
   },
