@@ -36,7 +36,7 @@
     "c8": "7.14.0",
     "eslint": "8.56.0",
     "husky": "8.0.3",
-    "jsdoc-to-markdown": "8.0.0",
+    "jsdoc-to-markdown": "8.0.1",
     "jsdoc-tsimport-plugin": "^1.0.5",
     "lint-staged": "13.3.0",
     "mocha": "10.2.0",
