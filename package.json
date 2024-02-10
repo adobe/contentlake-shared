@@ -39,7 +39,7 @@
     "jsdoc-to-markdown": "8.0.1",
     "jsdoc-tsimport-plugin": "^1.0.5",
     "lint-staged": "13.3.0",
-    "mocha": "10.2.0",
+    "mocha": "10.3.0",
     "mocha-multi-reporters": "1.5.1",
     "nock": "13.5.1",
     "semantic-release": "^19.0.2",
