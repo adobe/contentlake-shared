@@ -26,7 +26,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@adobe/helix-universal": "^4.3.0",
+    "@adobe/helix-universal": "^5.0.0",
     "node-fetch": "^2.6.11"
   }
 }
