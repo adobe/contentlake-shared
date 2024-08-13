@@ -30,10 +30,10 @@
     "@adobe/helix-shared-wrap": "^2.0.0",
     "@adobe/helix-status": "^10.0.9",
     "@adobe/helix-universal-logger": "^3.0.10",
-    "node-fetch": "^2.6.11"
+    "node-fetch": "^3.0.0"
   },
   "devDependencies": {
     "nock": "^13.3.1",
-    "sinon": "^15.2.0"
+    "sinon": "^18.0.0"
   }
 }
